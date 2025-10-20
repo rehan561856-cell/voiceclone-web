@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Voice Clone</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #fafafa; }
+        input, textarea, button { margin: 10px; padding: 10px; width: 250px; }
+        button { background-color: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h2>🎙️ Voice Cloning Demo</h2>
+    <form id="cloneForm" enctype="multipart/form-data">
+        <textarea name="text" placeholder="Enter text to speak" required></textarea><br>
+        <input type="file" name="sample" accept=".wav" required><br>
+        <button type="submit">Generate Voice</button>
+    </form>
+    <audio id="output" controls style="display:none;"></audio>
+
+    <script>
+        document.getElementById("cloneForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const res = await fetch("/clone", { method: "POST", body: formData });
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const audio = document.getElementById("output");
+            audio.src = url;
+            audio.style.display = "block";
+            audio.play();
+        });
+    </script>
+</body>
+</html>
